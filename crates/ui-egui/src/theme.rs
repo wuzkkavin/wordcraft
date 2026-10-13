@@ -415,9 +415,30 @@ pub fn install_fonts_language_extra(
     system_cjk: bool,
     faces: &[Arc<wordcraft_fonts::FontFace>],
 ) {
-    let mut fonts = font_definitions_language(prefer_hans, prefer_korean, system_cjk);
+    install_fonts_language_tc(ctx, prefer_hans, prefer_korean, system_cjk, false, faces);
+}
+
+/// [`install_fonts_language_extra`], with `traditional` marking the Traditional Chinese
+/// interface: this fork bundles the jf open huninn face (a Taiwanese Traditional Chinese
+/// typeface, OFL) and leads the CJK fallback with it, so the Traditional interface renders
+/// in Traditional glyph forms on every platform, web included, instead of the Simplified
+/// craft-fonts face.
+pub fn install_fonts_language_tc(
+    ctx: &egui::Context,
+    prefer_hans: bool,
+    prefer_korean: bool,
+    system_cjk: bool,
+    traditional: bool,
+    faces: &[Arc<wordcraft_fonts::FontFace>],
+) {
+    let mut fonts = font_definitions_language_tc(prefer_hans, prefer_korean, system_cjk, traditional);
     add_fallback_faces(&mut fonts, faces);
     ctx.set_fonts(fonts);
+}
+
+/// Backwards-compatible alias used by earlier fork code.
+pub fn install_fonts_tc(ctx: &egui::Context, prefer_hans: bool, system_cjk: bool, traditional: bool, faces: &[Arc<wordcraft_fonts::FontFace>]) {
+    install_fonts_language_tc(ctx, prefer_hans, false, system_cjk, traditional, faces);
 }
 
 /// Add `faces` after every other font of the interface families.
@@ -471,6 +492,12 @@ pub fn font_definitions(prefer_hans: bool, system_cjk: bool) -> FontDefinitions 
 
 /// The interface fonts, ordered for the preferred CJK writing system.
 pub fn font_definitions_language(prefer_hans: bool, prefer_korean: bool, system_cjk: bool) -> FontDefinitions {
+    font_definitions_language_tc(prefer_hans, prefer_korean, system_cjk, false)
+}
+
+/// [`font_definitions_language`], with `traditional` leading the CJK fallback with this
+/// fork's bundled jf open huninn face (Traditional Chinese, OFL) ahead of the craft-fonts faces.
+pub fn font_definitions_language_tc(prefer_hans: bool, prefer_korean: bool, system_cjk: bool, traditional: bool) -> FontDefinitions {
     let mut fonts = FontDefinitions::default();
     let add = |fonts: &mut FontDefinitions, name: &str, bytes: &'static [u8]| {
         fonts.font_data.insert(name.into(), Arc::new(FontData::from_static(bytes)));
@@ -497,6 +524,10 @@ pub fn font_definitions_language(prefer_hans: bool, prefer_korean: bool, system_
             }
         }
     };
+    if traditional {
+        // The fork's bundled Traditional Chinese face, ahead of every other CJK face.
+        add_cjk(&mut fonts, "jf-openhuninn".into(), FontData::from_static(include_bytes!("../../../assets/fonts/jf-openhuninn-2.1.ttf")));
+    }
     let cjk = wordcraft_fonts::ui_cjk_fonts_for(prefer_hans, prefer_korean);
     for f in &cjk {
         // The same static bytes the document fonts use: one copy in the binary.
