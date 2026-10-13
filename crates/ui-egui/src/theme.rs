@@ -349,7 +349,15 @@ pub fn install_fonts_with(ctx: &egui::Context, prefer_hans: bool, system_cjk: bo
 /// faces that cover text the interface fonts cannot draw (an input method's composition, or a
 /// file name in the window caption).
 pub fn install_fonts_extra(ctx: &egui::Context, prefer_hans: bool, system_cjk: bool, faces: &[Arc<wordcraft_fonts::FontFace>]) {
-    let mut fonts = font_definitions(prefer_hans, system_cjk);
+    install_fonts_tc(ctx, prefer_hans, system_cjk, false, faces);
+}
+
+/// [`install_fonts_extra`], with `traditional` marking the Traditional Chinese interface: this
+/// fork bundles the jf open huninn face (a Taiwanese Traditional Chinese typeface, OFL) and
+/// leads the CJK fallback with it, so the Traditional interface renders in Traditional glyph
+/// forms on every platform, web included, instead of the Simplified craft-fonts face.
+pub fn install_fonts_tc(ctx: &egui::Context, prefer_hans: bool, system_cjk: bool, traditional: bool, faces: &[Arc<wordcraft_fonts::FontFace>]) {
+    let mut fonts = font_definitions_tc(prefer_hans, system_cjk, traditional);
     add_fallback_faces(&mut fonts, faces);
     ctx.set_fonts(fonts);
 }
@@ -400,6 +408,12 @@ pub fn faces_for_preedit(
 
 /// The interface fonts; see [`install_fonts_with`].
 pub fn font_definitions(prefer_hans: bool, system_cjk: bool) -> FontDefinitions {
+    font_definitions_tc(prefer_hans, system_cjk, false)
+}
+
+/// [`font_definitions`], with `traditional` leading the CJK fallback with this fork's bundled
+/// jf open huninn face (Traditional Chinese, OFL) ahead of the craft-fonts faces.
+pub fn font_definitions_tc(prefer_hans: bool, system_cjk: bool, traditional: bool) -> FontDefinitions {
     let mut fonts = FontDefinitions::default();
     let add = |fonts: &mut FontDefinitions, name: &str, bytes: &'static [u8]| {
         fonts.font_data.insert(name.into(), Arc::new(FontData::from_static(bytes)));
@@ -426,6 +440,10 @@ pub fn font_definitions(prefer_hans: bool, system_cjk: bool) -> FontDefinitions 
             }
         }
     };
+    if traditional {
+        // The fork's bundled Traditional Chinese face, ahead of every other CJK face.
+        add_cjk(&mut fonts, "jf-openhuninn".into(), FontData::from_static(include_bytes!("../../../assets/fonts/jf-openhuninn-2.1.ttf")));
+    }
     let cjk = wordcraft_fonts::ui_cjk_fonts(prefer_hans);
     for f in &cjk {
         // The same static bytes the document fonts use: one copy in the binary.
