@@ -66,7 +66,7 @@ pub static LANGUAGES: [LangInfo; 23] = [
     // Traditional Chinese (Taiwan vocabulary); `zh-TW`, `zh-HK`, `zh-MO` and `zh-Hant-*` resolve here.
     LangInfo {
         code: "zh-hant",
-        name: "繁體中文",
+        name: "繁體中文（台灣）",
         source: include_str!("zh-hant.tsv"),
         prefer_hans: true,
         editing_lang: None,
