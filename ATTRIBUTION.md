@@ -34,6 +34,8 @@ Generated-in-code art is original and has no file to list: the UI icon set (`cra
 | `assets/fonts/Inter-Regular.ttf` | Rasmus Andersson / The Inter Project Authors | https://github.com/rsms/inter | OFL-1.1 (`assets/fonts/OFL-Inter.txt`) | Open-source typeface (Latin UI/document font, carried over from DesignCraft) |
 | `assets/fonts/Inter-SemiBold.ttf` | Rasmus Andersson / The Inter Project Authors | https://github.com/rsms/inter | OFL-1.1 (`assets/fonts/OFL-Inter.txt`) | Open-source typeface (Latin UI/document font, carried over from DesignCraft) |
 | `assets/fonts/JetBrainsMono-Regular.ttf` | The JetBrains Mono Project Authors | https://github.com/JetBrains/JetBrainsMono | OFL-1.1 (`assets/fonts/OFL-JetBrainsMono.txt`) | Open-source typeface (Latin UI/document font, carried over from DesignCraft) |
+| `assets/fonts/jf-openhuninn-2.1.ttf` | justfont / jf open 粉圓 | https://github.com/justfont/open-huninn-font | OFL-1.1 (`assets/fonts/jf-openhuninn-OFL.txt`) | Traditional Chinese interface font bundled by this fork (wuzkkavin) at its owner's request — an exception to the rule above that new fonts live in craft-fonts; leads the CJK fallback for the Traditional Chinese interface so it renders in Traditional glyph forms on desktop and web. |
+| `assets/fonts/jf-openhuninn-OFL.txt` | (licence text) | https://github.com/justfont/open-huninn-font | — |  |
 | `assets/fonts/OFL-Inter.txt` | (licence text) | upstream project | — |  |
 | `assets/fonts/OFL-JetBrainsMono.txt` | (licence text) | upstream project | — |  |
 | `assets/fonts/OFL-SourceSans3.txt` | (licence text) | upstream project | — |  |
