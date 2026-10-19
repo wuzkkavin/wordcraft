@@ -2244,7 +2244,11 @@ impl WordApp {
     fn install_ui_fonts(&mut self, ctx: &egui::Context, lang: i18n::Lang) {
         let system_cjk = self.fonts_system_cjk || self.want_system_cjk || lang.uses_cjk();
         let traditional = lang.code() == "zh-hant";
-        if !self.styled || lang.prefers_hans() != self.fonts_hans || lang.prefers_korean() != self.fonts_korean || traditional != self.fonts_tc || system_cjk != self.fonts_system_cjk
+        if !self.styled
+            || lang.prefers_hans() != self.fonts_hans
+            || lang.prefers_korean() != self.fonts_korean
+            || traditional != self.fonts_tc
+            || system_cjk != self.fonts_system_cjk
         {
             theme::install_fonts_language_tc(ctx, lang.prefers_hans(), lang.prefers_korean(), system_cjk, traditional, &self.canvas.ime_faces);
             self.fonts_hans = lang.prefers_hans();
