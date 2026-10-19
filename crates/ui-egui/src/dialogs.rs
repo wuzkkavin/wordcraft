@@ -2699,6 +2699,13 @@ fn body(app: &mut WordApp, ui: &mut Ui, d: &mut Dialog) -> bool {
                             .small()
                             .weak(),
                     );
+                    // Fork-only Traditional Chinese edition credit (owner's standing rule,
+                    // 2026-10-16): shown in the About tab only when the interface language
+                    // is Traditional Chinese (Taiwan).
+                    if crate::i18n::current().code() == "zh-hant" {
+                        ui.add_space(8.0);
+                        ui.label(egui::RichText::new("©Copyright 2026 By 吳治綱 繁體中文化").strong());
+                    }
                 }
             }
             let (ok, cancel) = buttons(ui, tl!("Close"));
